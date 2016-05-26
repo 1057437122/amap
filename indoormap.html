@@ -1,0 +1,75 @@
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<style>
+#container {width:100%; height: 500px; }  
+</style>
+<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+<body>
+	<div id="container"></div> 
+	<div id="panel"></div>
+</body>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=cbe0f72a58f6c4a594de9be79b3dee0b&plugin=AMap.Walking"></script> 
+<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+<script>
+	var map = new AMap.Map('container');
+	map.setZoom(20);
+
+	map.on('complete',function(){
+        if(map.indoorMap){
+            map.indoorMap.showIndoorMap('B02130UB6M',5);
+        }
+      })
+	var clickEventListener = map.on('click', function(e) {
+        // document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
+        // alert(e.lnglat.getLng());
+        // alert(e.lnglat.getLat());
+        console.log(e.lnglat.getLng()+','+e.lnglat.getLat());
+    });
+
+    var walking = new AMap.Walking({
+    	map:map,
+    	result:"panel",
+    });
+    walking.search([117.00202,36.662761],[117.003565,36.662683]);
+
+    var contextMenu = new AMap.ContextMenu();  //创建右键菜单
+    //右键放大
+    contextMenu.addItem("ZOOMIN", function() {
+        map.zoomIn();
+    }, 0);
+    //右键缩小
+    contextMenu.addItem("ZOOMOUT", function() {
+        map.zoomOut();
+    }, 1);
+    
+    //右键添加Marker标记
+    contextMenu.addItem("ADDMARKER", function(e) {
+        var marker = new AMap.Marker({
+            map: map,
+            position: contextMenuPositon //基点位置
+        });
+    }, 3);
+    contextMenu.addItem("showPath",function(e){
+    	lineArr = [];
+    	lineArr.push([117.00202,36.662761]);
+    	lineArr.push([117.003565,36.662683]);
+    	var polyline = new AMap.Polyline({
+            map: map,
+            path: lineArr,
+            strokeColor: "#00A",  //线颜色
+            strokeOpacity: 1,     //线透明度
+            strokeWeight: 3,      //线宽
+            strokeStyle: "solid"  //线样式
+        });
+    })
+    // /117.00202,36.662761
+    // /117.003565,36.662683
+    map.on('rightclick', function(e) {
+        contextMenu.open(map, e.lnglat);
+        contextMenuPositon = e.lnglat;
+    });
+
+</script>
+</html>
