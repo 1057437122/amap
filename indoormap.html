@@ -6,70 +6,50 @@
 #container {width:100%; height: 500px; }  
 </style>
 <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+<link rel="stylesheet" href="http://indoorweb.amap.com/indoormap-1.0.css"/>
 <body>
 	<div id="container"></div> 
 	<div id="panel"></div>
 </body>
 <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=cbe0f72a58f6c4a594de9be79b3dee0b&plugin=AMap.Walking"></script> 
-<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+<script type="text/javascript" src="http://indoorweb.amap.com/indoormap-1.0.js"></script>
+<!-- <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script> -->
 <script>
-	var map = new AMap.Map('container');
-	map.setZoom(20);
-
-	map.on('complete',function(){
-        if(map.indoorMap){
-            map.indoorMap.showIndoorMap('B02130UB6M',5);
-        }
-      })
-	var clickEventListener = map.on('click', function(e) {
-        // document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
-        // alert(e.lnglat.getLng());
-        // alert(e.lnglat.getLat());
-        console.log(e.lnglat.getLng()+','+e.lnglat.getLat());
+	//示例 初始化地图
+    var map = new Indoor.Map('container',{
+        key:'cbe0f72a58f6c4a594de9be79b3dee0b',
+        buildingId:'B02130UB6M',
+      //   renderColors:{
+      //       // defaultFontColor:'red', //显示文字颜色
+      //       shopHightLightStyle:{   //点击高亮商铺样式
+      //         // 'fillColor': '#fffdf8',
+      //         // 'color': '#d1ccc0',
+      //         'weight': 1,
+      //         'fillOpacity': 1,
+      //         'opacity': 1,
+      //         // 'fontColor':'red'
+      //       },
+      //       shopStyle:[
+      //       //楼层面样式
+      //       { typeCode: 'floor', style: { 'fillColor': 'red', 'color': 'red', 'fontColor':'#d1ccc0' } },
+      //       //商铺分类配色，根据ft_typecode的前2位
+      //       { typeCode: '98,05', style: { 'fillColor': 'red', 'color': 'red', 'fontColor':'#d1ccc0' } },
+      //       //中空、非开放区域配色
+      //       { typeCode: '00', style: { 'fillColor': 'red', 'color': 'red', 'fontColor':'#d1ccc0' } },
+      //       //根据ft_sourceid配色
+      //       { id: '49130210100059', style: { 'fillColor': 'red', 'color': 'red', 'fontColor':'#000000' } },
+      //       ]
+      // }
     });
 
-    var walking = new AMap.Walking({
-    	map:map,
-    	result:"panel",
-    });
-    walking.search([117.00202,36.662761],[117.003565,36.662683]);
-
-    var contextMenu = new AMap.ContextMenu();  //创建右键菜单
-    //右键放大
-    contextMenu.addItem("ZOOMIN", function() {
-        map.zoomIn();
-    }, 0);
-    //右键缩小
-    contextMenu.addItem("ZOOMOUT", function() {
-        map.zoomOut();
-    }, 1);
-    
-    //右键添加Marker标记
-    contextMenu.addItem("ADDMARKER", function(e) {
-        var marker = new AMap.Marker({
-            map: map,
-            position: contextMenuPositon //基点位置
-        });
-    }, 3);
-    contextMenu.addItem("showPath",function(e){
-    	lineArr = [];
-    	lineArr.push([117.00202,36.662761]);
-    	lineArr.push([117.003565,36.662683]);
-    	var polyline = new AMap.Polyline({
-            map: map,
-            path: lineArr,
-            strokeColor: "#00A",  //线颜色
-            strokeOpacity: 1,     //线透明度
-            strokeWeight: 3,      //线宽
-            strokeStyle: "solid"  //线样式
-        });
+    // var clickEventListener = map.on('click', function(e) {
+    //     // document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
+    //     // alert(e.lnglat.getLng());
+    //     // alert(e.lnglat.getLat());
+    //     console.log(map.getCenter());
+    // });
+    map.on('click',function(e){
+        console.log(e.latlng);
     })
-    // /117.00202,36.662761
-    // /117.003565,36.662683
-    map.on('rightclick', function(e) {
-        contextMenu.open(map, e.lnglat);
-        contextMenuPositon = e.lnglat;
-    });
-
 </script>
 </html>
